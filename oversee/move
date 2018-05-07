@@ -1,0 +1,37 @@
+#!/usr/bin/python3
+
+from argparse import ArgumentParser
+import re
+import os
+
+from oversee.utils import run
+
+known = {}
+
+
+def convert_to_scp(loc, path):
+    loc = known[loc]
+    return '{}:{}'.format(loc, path) if loc else path
+
+
+argparser = ArgumentParser()
+argparser.add_argument('--from')
+argparser.add_argument('--to')
+
+args = vars(argparser.parse_args())
+
+from_arg = args['from'][0]
+to_arg = args['to'][0]
+
+move_pattern = re.compile(r'([a-zA-Z0-9]+):([a-zA-Z0-9/]+)')
+
+from_match = move_pattern.match(from_arg)
+from_loc, from_path = from_match.group(1), from_match.group(2)
+
+to_match = move_pattern.match(to_arg)
+to_loc, to_path = to_match.group(1), to_match.group(2)
+
+from_path, to_path = [path.replace('~', os.path.expanduser('~')) for path in [from_path, to_path]]
+
+command = 'scp -r {} {}'.format(convert_to_scp(from_loc, from_path), convert_to_scp(to_loc, to_path))
+run(command)

@@ -1,0 +1,195 @@
+#!/usr/bin/python3
+
+from manage import parser
+from manage.utils import apt_get, run, add_apt_repository, perform_apt_get, dependant_on, installable, \
+    perform_apt_get_purge_remove, jetbrains
+
+
+@apt_get
+@installable
+def git():
+    pass
+
+
+@apt_get
+@installable
+def google_chrome_stable():
+    run('wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -', shell=True)
+    run("echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list", shell=True)
+
+
+@apt_get
+@installable
+def arc_theme():
+    run('sudo sh -c "echo \'deb http://download.opensuse.org/repositories/home:/Horst3180/xUbuntu_16.04/ /\' > /etc/apt/sources.list.d/arc-theme.list"')
+
+
+@apt_get
+@installable
+def unity_tweak_tool():
+    pass
+
+
+@apt_get
+@installable
+def atom():
+    add_apt_repository('ppa:webupd8team/atom')
+
+
+@apt_get
+@installable
+def python3_setuptools():
+    pass
+
+
+@dependant_on(python3_setuptools)
+@installable
+def pip35():
+    perform_apt_get('')
+    run('sudo easy_install3 pip')
+
+
+@apt_get
+@installable
+def terminator():
+    add_apt_repository('ppa:gnome-terminator/nightly')
+
+
+@installable
+def terminator_remove():
+    perform_apt_get_purge_remove('terminator')
+
+
+@apt_get
+@installable
+def default_jdk():
+    pass
+
+
+@apt_get
+@installable
+def nodejs():
+    pass
+
+
+@apt_get
+@installable
+def npm():
+    pass
+
+
+@dependant_on(nodejs, npm)
+@installable
+def stable_node():
+    run('sudo npm cache clean -f')
+    run('sudo npm install -g n')
+    run('sudo n stable')
+
+
+@installable
+def hipchat():
+    run('wget https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-4.0.1517-Linux.deb')
+    run('sudo dpkg -i HipChat4-4.0.1517-Linux.deb')
+    run('rm -f HipChat4-4.0.1517-Linux.deb')
+
+
+@apt_get
+@installable
+def sublime_text():
+    run('wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -', shell=True)
+    run('echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list', shell=True)
+
+@apt_get
+@installable
+def python3_sphinx():
+    pass
+
+
+@jetbrains('PCP')
+@installable
+def pycharm():
+    pass
+
+
+@jetbrains('WS')
+@installable
+def webstorm():
+    pass
+
+
+@jetbrains('IIU')
+@installable
+def idea():
+    pass
+
+
+@jetbrains('DG')
+@installable
+def datagrip():
+    pass
+
+
+@jetbrains('CL')
+@installable
+def clion():
+    pass
+
+
+@installable
+def post_man():
+    run('wget https://dl.pstmn.io/download/latest/linux64 -O postman.tar.gz')
+    run('sudo tar -xzf postman.tar.gz -C /opt')
+    run('rm -f postman.tar.gz')
+    run('sudo ln -s /opt/Postman/Postman /usr/bin/postman')
+    run('''cat > ~/.local/share/applications/postman.desktop <<EOL
+[Desktop Entry]
+Encoding=UTF-8
+Name=Postman
+Exec=postman
+Icon=/opt/Postman/resources/app/assets/icon.png
+Terminal=false
+Type=Application
+Categories=Development;
+EOL''')
+
+
+@apt_get
+@installable
+def python3_tk():
+    """Neccessary to run a whole bunch of python stuff."""
+    pass
+
+
+@apt_get
+@installable
+def python3_dev():
+    """Neccessary package for installing cython."""
+    pass
+
+@apt_get
+@installable
+def compizconfig_settings_manager():
+    pass
+
+
+@apt_get
+@installable
+def compiz_plugins_extra():
+    pass
+
+@dependant_on(compizconfig_settings_manager, compiz_plugins_extra)
+@installable
+def compiz():
+    """Neccessary to move items between windows! Enable `Put` in `Windows Management` and add shortcuts for `Put To Next/Previous Output`."""
+    pass
+
+@installable
+def purge_libreoffice():
+    run('sudo apt-get purge libreoffice*')
+
+
+if __name__ == '__main__':
+    funcs = parser.get_all()
+
+    for func_name in funcs:
+        globals()[func_name]()
