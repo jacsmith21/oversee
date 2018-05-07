@@ -1,1 +1,10 @@
-venv
+# JetBrains
+*.iws
+.idea/workspace.xml
+.idea/tasks.xml
+
+# Python
+__pycache__/
+
+# Repository
+oversee.egg-info/
