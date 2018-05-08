@@ -3,13 +3,11 @@ import subprocess
 import tarfile
 import elevate
 
-from oversee import configure
+from oversee import config
 
 
 def install(name):
-    path = os.path.join(os.path.dirname(__file__), '..', 'defaults', 'install.yaml')
-    config = configure.read(path)
-    commands = config[name]
+    commands = config.install[name]
     for command in commands:
         interpret(command, name)
 
@@ -22,15 +20,20 @@ def interpret(command, name):
             try:
                 COMMANDS[command](name)
             except KeyError:
-                run(command, shell=True)
+                run(command)
 
 
-def run(command, shell=False, background=False):
-    command = command.split()
-    if background:
-        subprocess.Popen(command, shell)
-    else:
-        subprocess.call(command, shell=shell)
+def run(command, background=False):
+    commands = command.split('|')
+
+    stdin = None
+    for command in commands:
+        command = command.split()
+        if background:
+            process = subprocess.Popen(command, stdin=stdin)
+        else:
+            process = subprocess.call(command, stdin=stdin)
+        stdin = process.stdout
 
 
 def add_apt_repository(repo):

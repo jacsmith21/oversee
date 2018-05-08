@@ -13,8 +13,7 @@ setup(
         'python-elevate',
         'PyYaml'
     ],
-    entry_points='''
-    [console_scripts]
-    oversee=oversee.main:main
-    '''
+    entry_points={
+        'console_scripts': ['oversee=oversee.main:main']
+    }
 )

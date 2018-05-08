@@ -1,7 +1,7 @@
 import click
 
 from oversee import terminal
-from oversee import configure
+from oversee import config
 
 
 @click.group()
@@ -16,8 +16,15 @@ def install(name):
     terminal.install(name)
 
 
+@click.command()
+@click.argument('src')
+@click.argument('dst')
+def move(src, dst):
+    pass
+
+
 # noinspection PyUnresolvedReferences
-install.help = install.__doc__.format(' '.join(configure.read_install().keys()))
+install.help = install.__doc__.format(' '.join(config.install.keys()))
 
 main.add_command(install)
 
