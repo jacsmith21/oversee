@@ -16,6 +16,7 @@ def link(func):
 def tb_default():
     return 'tensorboard --logdir=TRAIN:training,VALIDATION:summary'
 
+
 @alias
 def which_vga():
     return 'lspci -vnnn | perl -lne \'print if /^\d+\:.+(\[\S+\:\S+\])/\' | grep VGA'

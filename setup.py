@@ -10,7 +10,8 @@ setup(
     url='http://github.com/jacsmith21/oversee',
     install_requires=[
         'click',
-        'elevate'
+        'python-elevate',
+        'PyYaml'
     ],
     entry_points='''
     [console_scripts]
