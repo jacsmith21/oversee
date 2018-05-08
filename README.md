@@ -10,6 +10,8 @@ pip install oversee
 oversee --help
 ```
 
+Place a `.oversee.yaml` in your home directory (ex. `~/.oversee.yaml`). See `examples/` for example `.oversee.yaml` files!
+
 ## Example Usage
 ```
 oversee install clion
