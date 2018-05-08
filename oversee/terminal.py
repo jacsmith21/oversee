@@ -1,6 +1,9 @@
 import os
+import re
 import subprocess
 import tarfile
+
+import click
 import elevate
 
 from oversee import config
@@ -73,3 +76,75 @@ def jetbrains(code):
 
 
 COMMANDS = {'apt-get': apt_get, 'install': install, 'repository': add_apt_repository, 'jetbrains': jetbrains}
+
+
+def scp(src, dst):
+    pattern = re.compile(r'(?:([~@.\w]+):)?([~@.\w/]+)')
+
+    matched = pattern.match(src)
+    src_machine, src_path = matched.group(1), matched.group(2)
+
+    matched = pattern.match(dst)
+    dst_machine, dst_path = matched.group(1), matched.group(2)
+
+    def convert_to_scp(machine, path):
+        if machine is not None:
+            host = config.move['hosts'][machine]
+            user, _ = host.split('@')
+            path = path.replace('~', '/home/{}'.format(user))
+            return '{}:{}'.format(host, path) if machine else path
+        else:
+            return os.path.expanduser(path)
+
+    key = config.move['key']
+    key = os.path.expanduser(key)
+
+    if not os.path.exists(key):
+        raise FileNotFoundError('Key does not exist: {}'.format(key))
+
+    command = 'scp -i {} -r {} {}'.format(key, convert_to_scp(src_machine, src_path), convert_to_scp(dst_machine, dst_path))
+    click.echo(command)
+    run(command)
+
+
+def export_aliases():
+    with open('/home/jacob/.bash_aliases', 'w') as f:
+
+        bash_aliases = ''
+        for alias, command in config.bash_aliases['aliases'].items():
+            bash_aliases += 'alias {}="{}"\n'.format(alias, command)
+
+        bash_aliases += '\n'
+        for link in config.bash_aliases['links']:
+            bash_aliases += 'sudo ln -sf {} {}\n'.format(link['that'], link['this'])
+
+        bash_aliases += '\n'
+        for name, lines in config.bash_aliases['functions'].items():
+            bash_aliases += '{}()'.format(name)
+            bash_aliases += ' {\n'
+            for line in lines:
+                bash_aliases += '    {}\n'.format(line)
+        bash_aliases += '}\n'
+
+        bash_aliases += '\n'
+        for name, export in config.bash_aliases['exports'].items():
+            export = os.path.expanduser(export)
+            export = export.rstrip('\n')
+            bash_aliases += 'export {}="{}"\n'.format(name, export)
+
+        bash_aliases += '\n'
+        for path in config.bash_aliases['keys']:
+            path = os.path.expanduser(path)
+            bash_aliases += 'ssh-add {}\n'.format(path)
+
+        bash_aliases += '\n'
+        for source in config.bash_aliases['sources']:
+            source = os.path.expanduser(source)
+
+            if not os.path.exists(source):
+                click.echo('{} does not exist. Skipping source!'.format(source))
+                continue
+
+            bash_aliases += 'source {}\n'.format(source)
+
+        f.write(bash_aliases)

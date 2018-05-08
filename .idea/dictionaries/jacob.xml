@@ -2,6 +2,7 @@
   <dictionary name="jacob">
     <words>
       <w>stdin</w>
+      <w>yaml</w>
     </words>
   </dictionary>
 </component>

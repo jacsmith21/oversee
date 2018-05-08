@@ -1,0 +1,25 @@
+install:
+  clion:
+  - jetbrains: CL
+
+  terminator:
+    - repository: ppa:gnome-terminator/nightly
+    - apt-get  # apt-get is a built-in feature that uses the key to perform an apt-get install
+
+  default-jdk:
+    - apt-get
+
+move:
+  key: ~/.ssh/YourKey.pem
+  hosts:
+    test: ubuntu@ec2-534-1445-123-150.compute-1.amazonaws.com
+
+environments:
+  default:
+    - terminator
+    - google-chrome-stable
+    - sublime-text
+  python:
+    - python-tk
+    - pycharm
+    - python3-dev
