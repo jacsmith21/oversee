@@ -23,3 +23,28 @@ environments:
     - python-tk
     - pycharm
     - python3-dev
+
+
+bash_aliases:
+  aliases:
+    tb_default: tensorboard --logdir=TRAIN:training,VALIDATION:validation
+    which-vga: lspci -vnnn | perl -lne \'print if /^\d+\:.+(\[\S+\:\S+\])/\' | grep VGA
+
+  links:
+    -
+      this: /usr/bin/cmake
+      that: /usr/local/bin/cmake
+
+  functions:
+    parse_git_branch:
+      - git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+
+  exports:
+    PS1: >
+      \u@\sh \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $
+
+  keys:
+    - ~/.ssh/id_rsa
+
+  sources:
+    - ~/.local/bin/virtualenvwrapper.sh

@@ -111,15 +111,15 @@ def export_aliases():
     with open('/home/jacob/.bash_aliases', 'w') as f:
 
         bash_aliases = ''
-        for alias, command in config.bash_aliases['aliases'].items():
+        for alias, command in config.bash_aliases.get('aliases', {}).items():
             bash_aliases += 'alias {}="{}"\n'.format(alias, command)
 
         bash_aliases += '\n'
-        for link in config.bash_aliases['links']:
+        for link in config.bash_aliases.get('links', []):
             bash_aliases += 'sudo ln -sf {} {}\n'.format(link['that'], link['this'])
 
         bash_aliases += '\n'
-        for name, lines in config.bash_aliases['functions'].items():
+        for name, lines in config.bash_aliases.get('functions', {}).items():
             bash_aliases += '{}()'.format(name)
             bash_aliases += ' {\n'
             for line in lines:
@@ -127,18 +127,18 @@ def export_aliases():
         bash_aliases += '}\n'
 
         bash_aliases += '\n'
-        for name, export in config.bash_aliases['exports'].items():
+        for name, export in config.bash_aliases.get('exports', {}).items():
             export = os.path.expanduser(export)
             export = export.rstrip('\n')
             bash_aliases += 'export {}="{}"\n'.format(name, export)
 
         bash_aliases += '\n'
-        for path in config.bash_aliases['keys']:
+        for path in config.bash_aliases.get('keys', []):
             path = os.path.expanduser(path)
             bash_aliases += 'ssh-add {}\n'.format(path)
 
         bash_aliases += '\n'
-        for source in config.bash_aliases['sources']:
+        for source in config.bash_aliases.get('sources', []):
             source = os.path.expanduser(source)
 
             if not os.path.exists(source):
