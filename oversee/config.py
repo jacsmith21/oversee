@@ -11,5 +11,8 @@ path = os.path.join(os.path.dirname(__file__), '.install.yaml')
 with open(path) as f:
     install = yaml.load(f)
 
-bash_aliases = oversee.get('bash_aliases', {})
 move = oversee.get('move', {})
+
+
+def get_aliases(name):
+    return oversee.get('{}_aliases'.format(name))

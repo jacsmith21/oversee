@@ -25,9 +25,10 @@ def move(src, dst):
 
 
 @click.command()
-def export():
+@click.argument('name')
+def export(name):
     """Exports your bash aliases to .bash_aliases!"""
-    terminal.export_aliases()
+    terminal.export_aliases(name)
 
 
 # noinspection PyUnresolvedReferences

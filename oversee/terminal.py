@@ -107,44 +107,52 @@ def scp(src, dst):
     run(command)
 
 
-def export_aliases():
+def export_aliases(name):
+    aliases = config.get_aliases(name)
+
+    inherit = aliases.get('inherit', [])
+    if isinstance(inherit, str):
+        inherit = [inherit]
+
+    for parent in inherit:
+        aliases = elevate.builtin.dict_merge(config.get_aliases(parent), aliases)
+
+    bash_aliases = ''
+    for alias, command in aliases.get('aliases', {}).items():
+        bash_aliases += 'alias {}="{}"\n'.format(alias, command)
+
+    bash_aliases += '\n'
+    for link in aliases.get('links', []):
+        bash_aliases += 'sudo ln -sf {} {}\n'.format(link['that'], link['this'])
+
+    bash_aliases += '\n'
+    for name, lines in aliases.get('functions', {}).items():
+        bash_aliases += '{}()'.format(name)
+        bash_aliases += ' {\n'
+        for line in lines:
+            bash_aliases += '    {}\n'.format(line)
+    bash_aliases += '}\n'
+
+    bash_aliases += '\n'
+    for name, export in aliases.get('exports', {}).items():
+        export = os.path.expanduser(export)
+        export = export.rstrip('\n')
+        bash_aliases += 'export {}="{}"\n'.format(name, export)
+
+    bash_aliases += '\n'
+    for path in aliases.get('keys', []):
+        path = os.path.expanduser(path)
+        bash_aliases += 'ssh-add {}\n'.format(path)
+
+    bash_aliases += '\n'
+    for source in aliases.get('sources', []):
+        source = os.path.expanduser(source)
+
+        if not os.path.exists(source):
+            click.echo('{} does not exist. Skipping source!'.format(source))
+            continue
+
+        bash_aliases += 'source {}\n'.format(source)
+
     with open('/home/jacob/.bash_aliases', 'w') as f:
-
-        bash_aliases = ''
-        for alias, command in config.bash_aliases.get('aliases', {}).items():
-            bash_aliases += 'alias {}="{}"\n'.format(alias, command)
-
-        bash_aliases += '\n'
-        for link in config.bash_aliases.get('links', []):
-            bash_aliases += 'sudo ln -sf {} {}\n'.format(link['that'], link['this'])
-
-        bash_aliases += '\n'
-        for name, lines in config.bash_aliases.get('functions', {}).items():
-            bash_aliases += '{}()'.format(name)
-            bash_aliases += ' {\n'
-            for line in lines:
-                bash_aliases += '    {}\n'.format(line)
-        bash_aliases += '}\n'
-
-        bash_aliases += '\n'
-        for name, export in config.bash_aliases.get('exports', {}).items():
-            export = os.path.expanduser(export)
-            export = export.rstrip('\n')
-            bash_aliases += 'export {}="{}"\n'.format(name, export)
-
-        bash_aliases += '\n'
-        for path in config.bash_aliases.get('keys', []):
-            path = os.path.expanduser(path)
-            bash_aliases += 'ssh-add {}\n'.format(path)
-
-        bash_aliases += '\n'
-        for source in config.bash_aliases.get('sources', []):
-            source = os.path.expanduser(source)
-
-            if not os.path.exists(source):
-                click.echo('{} does not exist. Skipping source!'.format(source))
-                continue
-
-            bash_aliases += 'source {}\n'.format(source)
-
         f.write(bash_aliases)
