@@ -26,7 +26,7 @@ oversee move test:~/file.txt ~/
 
 ## Roadmap
 - Added jetbrains settings sync support
-- Add scp support for easier file transport
-- inheritance for .bash_aliases
 - Add project management components (make releases)
 - Autocomplete functionality
+- maybe use builtin functionality for file transfer
+- Add list commands

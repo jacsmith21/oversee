@@ -31,12 +31,27 @@ def export(name):
     terminal.export_aliases(name)
 
 
+@click.group()
+def jetbrains():
+    pass
+
+
+@click.command()
+@click.argument('name')
+def save(name):
+    click.echo('saving {}'.format(name))
+
+
+jetbrains.add_command(save)
+
+
 # noinspection PyUnresolvedReferences
 install.help = install.__doc__.format(' '.join(config.install.keys()))
 
 main.add_command(install)
 main.add_command(move)
 main.add_command(export)
+main.add_command(jetbrains)
 
 
 if __name__ == '__main__':
