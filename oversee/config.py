@@ -16,3 +16,6 @@ move = oversee.get('move', {})
 
 def get_aliases(name):
     return oversee.get('{}_aliases'.format(name))
+
+
+jetbrains = oversee.get('jetbrains', {})

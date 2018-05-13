@@ -1,3 +1,5 @@
+import os
+
 import click
 
 from oversee import terminal
@@ -39,7 +41,29 @@ def jetbrains():
 @click.command()
 @click.argument('name')
 def save(name):
+    name = name.lower()
+    name = '.{}'.format(name)
     click.echo('saving {}'.format(name))
+
+    paths = []
+    for path in os.listdir(os.path.expanduser('~')):
+        path = os.path.join(os.path.expanduser('~'), path)
+        if os.path.isdir(path):
+            folder = os.path.basename(path)
+            folder = folder.lower()
+            if folder.startswith(name):
+                paths.append(path)
+
+    if len(paths) == 0:
+        click.echo('No paths matching {} found!'.format(name))
+        return
+    elif len(paths) > 1:
+        click.echo('More than one path matching {} found!'.format(name))
+        return
+    else:
+        path = paths[0]
+
+    path = os.path.join(path, 'config')
 
 
 jetbrains.add_command(save)

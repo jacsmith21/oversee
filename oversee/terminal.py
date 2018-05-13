@@ -18,7 +18,11 @@ def install(name):
 def interpret(command, name):
         if isinstance(command, dict):
             for key in command:
-                COMMANDS[key](command[key])
+                if isinstance(command[key], list):
+                    for item in command[key]:
+                        COMMANDS[key](item)
+                else:
+                    COMMANDS[key](command[key])
         else:
             try:
                 COMMANDS[command](name)
@@ -35,7 +39,8 @@ def run(command, background=False):
         if background:
             process = subprocess.Popen(command, stdin=stdin)
         else:
-            process = subprocess.call(command, stdin=stdin)
+            process = subprocess.Popen(command, stdin=stdin)
+            process.wait()
         stdin = process.stdout
 
 

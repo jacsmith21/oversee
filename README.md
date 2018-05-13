@@ -26,7 +26,8 @@ oversee move test:~/file.txt ~/
 
 ## Roadmap
 - Added jetbrains settings sync support
+- Make environments work
 - Add project management components (make releases)
 - Autocomplete functionality
 - maybe use builtin functionality for file transfer
-- Add list commands
+- Add list commands using decorator
