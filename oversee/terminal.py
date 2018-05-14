@@ -10,6 +10,7 @@ from oversee import config
 
 
 def install(name):
+    click.echo('Installing {}'.format(name))
     commands = config.install[name]
     for command in commands:
         interpret(command, name)
@@ -114,6 +115,8 @@ def scp(src, dst):
 
 def export_aliases(name):
     aliases = config.get_aliases(name)
+    if aliases is None:
+        click.echo('{} aliases do not exist in .oversee.yaml'.format(name))
 
     inherit = aliases.get('inherit', [])
     if isinstance(inherit, str):
@@ -159,5 +162,11 @@ def export_aliases(name):
 
         bash_aliases += 'source {}\n'.format(source)
 
-    with open('/home/jacob/.bash_aliases', 'w') as f:
+    bash_aliases += '\n'
+    for eval in aliases.get('eval', []):
+        bash_aliases += 'eval "{}"'.format(eval)
+
+    path = os.path.expanduser('~/.bash_aliases')
+    click.echo('Exporting aliases to {}'.format(path))
+    with open(path, 'w') as f:
         f.write(bash_aliases)

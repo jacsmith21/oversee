@@ -1,4 +1,5 @@
 import os
+import re
 
 import yaml
 
@@ -18,4 +19,10 @@ def get_aliases(name):
     return oversee.get('{}_aliases'.format(name))
 
 
+aliases = {}
+for key in oversee:
+    if key.endswith('_aliases'):
+        aliases[re.match(r'(\w+)_aliases', key).group(1)] = oversee.get(key)
+
 jetbrains = oversee.get('jetbrains', {})
+environments = oversee.get('environments', {})

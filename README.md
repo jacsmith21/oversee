@@ -25,10 +25,10 @@ oversee move test:~/file.txt ~/
 ```
 
 ## Roadmap
-- [ ] Added jetbrains settings sync support
-- [ ] Make environments work
+- [x] Added jetbrains settings sync support
+- [x] Make environments work
 - [ ] Add project management components (make releases)
-- [ ] Autocomplete functionality
+- [x] Autocomplete functionality
 - [ ] maybe use builtin functionality for file transfer
 - [ ] Add list commands using decorator
 - [ ] Add jetbrains .gitignore command
