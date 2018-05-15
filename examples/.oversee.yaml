@@ -9,11 +9,6 @@ install:
   default-jdk:
     - apt-get
 
-move:
-  key: ~/.ssh/YourKey.pem
-  hosts:
-    test: ubuntu@ec2-534-1445-123-150.compute-1.amazonaws.com
-
 environments:
   default:
     - terminator

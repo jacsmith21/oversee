@@ -1,8 +1,8 @@
 # Oversee
 Helps oversee your Ubuntu OS!
 
-Want to install CLion with one command? Or Google Chrome? Or all of your development software? How about a cleaner and easier way to define your .bash_aliases? Or an easier way
-to perform secure file transfers? Or a way to sync all of your jetbrains settings? This package will help!
+Want to install CLion with one command? Or Google Chrome? Or all of your development software? How about a cleaner and easier way to define your .bash_aliases? Or a way to
+sync all of your jetbrains settings? This package will help!
 
 
 ## Installation
@@ -20,16 +20,12 @@ oversee install clion
 
 # Export your bash aliases to ~/.bash_aliases
 oversee export
-
-# Move a file to your local machine where `test` is a host defined in `.oversee.yaml`
-oversee move test:~/file.txt ~/
 ```
 
 ## Roadmap
 - [x] Added jetbrains settings sync support
 - [x] Make environments work
-- [ ] Add project management components (make releases)
+- [x] Add project management components (make releases)
 - [x] Autocomplete functionality
-- [ ] maybe use builtin functionality for file transfer
 - [x] Add list commands using decorator
 - [x] Add jetbrains .gitignore command

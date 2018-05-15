@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='oversee',
     packages=['oversee'],
-    version='0.2',
+    version='0.21',
     package_data={'oversee': 'oversee/*.yaml'},
     include_package_data=True,
     description='A python utility to help manage your Ubuntu OS!',

@@ -1,4 +1,5 @@
 import os
+import re
 import shutil
 import urllib.request
 
@@ -21,15 +22,6 @@ def main():
 def install(name):
     """Installs a module defined in the .yaml file. Options include: {}"""
     terminal.install(name)
-
-
-@click.command()
-@extensions.list_options(config.move.get('known', {}))
-@click.argument('src')
-@click.argument('dst')
-def move(src, dst):
-    """Moves a file / folder from one location to another using scp!"""
-    terminal.scp(src, dst)
 
 
 @click.command()
@@ -188,10 +180,37 @@ def initignore(name, path):
         click.echo('No .gitignore files found :(')
 
 
+@click.command()
+@click.argument('version')
+def release(version):
+    path = os.path.join(os.getcwd(), 'setup.py')
+    if not os.path.exists(path):
+        click.echo('setup.py does not exist :(')
+        return
+
+    with open(path) as f:
+        contents = f.read()
+
+    pattern = '(version=\')([0-9.]+)(\')'
+    old_version = re.search(pattern, contents).group(2)
+    click.echo('Incrementing setup.py from {} to {}'.format(old_version, version))
+
+    contents = re.sub(pattern, '\g<1>{}\g<3>'.format(version), contents)
+    with open(path, 'w') as f:
+        f.write(contents)
+
+    if click.confirm('Upload to PyPi?'):
+        terminal.run('python setup.py sdist')
+        terminal.run('python setup.py sdist upload')
+
+    if click.confirm('Make release tag?'):
+        terminal.run('git tag {}'.format(version))
+
+
 project.add_command(initignore)
+project.add_command(release)
 
 main.add_command(install)
-main.add_command(move)
 main.add_command(export)
 main.add_command(save)
 main.add_command(sync)

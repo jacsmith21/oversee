@@ -84,35 +84,6 @@ def jetbrains(code):
 COMMANDS = {'apt-get': apt_get, 'install': install, 'repository': add_apt_repository, 'jetbrains': jetbrains}
 
 
-def scp(src, dst):
-    pattern = re.compile(r'(?:([~@.\w]+):)?([~@.\w/]+)')
-
-    matched = pattern.match(src)
-    src_machine, src_path = matched.group(1), matched.group(2)
-
-    matched = pattern.match(dst)
-    dst_machine, dst_path = matched.group(1), matched.group(2)
-
-    def convert_to_scp(machine, path):
-        if machine is not None:
-            host = config.move['known'][machine]
-            user, _ = host.split('@')
-            path = path.replace('~', '/home/{}'.format(user))
-            return '{}:{}'.format(host, path) if machine else path
-        else:
-            return os.path.expanduser(path)
-
-    key = config.move['key']
-    key = os.path.expanduser(key)
-
-    if not os.path.exists(key):
-        raise FileNotFoundError('Key does not exist: {}'.format(key))
-
-    command = 'scp -i {} -r {} {}'.format(key, convert_to_scp(src_machine, src_path), convert_to_scp(dst_machine, dst_path))
-    click.echo(command)
-    run(command)
-
-
 def export_aliases(name):
     aliases = config.get_aliases(name)
     if aliases is None:
