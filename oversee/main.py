@@ -199,12 +199,17 @@ def release(version):
     with open(path, 'w') as f:
         f.write(contents)
 
-    if click.confirm('Upload to PyPi?'):
-        terminal.run('python setup.py sdist')
-        terminal.run('python setup.py sdist upload')
+    if click.confirm('Make version commit?'):
+        message = click.prompt('Enter commit message: ', default=version)
+        terminal.run('git add .')
+        terminal.run('git commit -m "{}"'.format(message))
 
     if click.confirm('Make release tag?'):
         terminal.run('git tag {}'.format(version))
+
+    if click.confirm('Upload to PyPi?'):
+        terminal.run('python setup.py sdist')
+        terminal.run('python setup.py sdist upload')
 
 
 project.add_command(initignore)
