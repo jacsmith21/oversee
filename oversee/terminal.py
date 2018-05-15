@@ -95,7 +95,7 @@ def scp(src, dst):
 
     def convert_to_scp(machine, path):
         if machine is not None:
-            host = config.move['hosts'][machine]
+            host = config.move['known'][machine]
             user, _ = host.split('@')
             path = path.replace('~', '/home/{}'.format(user))
             return '{}:{}'.format(host, path) if machine else path

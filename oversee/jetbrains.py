@@ -28,22 +28,24 @@ def get_path(name):
         return paths[0]
 
 
-def options():
-    home = os.path.expanduser('~')
+home = os.path.expanduser('~')
 
-    jetbrains_folders = []
-    for item in os.listdir(home):
-        path = os.path.join(home, item)
-        if not os.path.isdir(path):
-            continue
+jetbrains_folders = []
+for item in os.listdir(home):
+    path = os.path.join(home, item)
+    if not os.path.isdir(path):
+        continue
 
-        folders = os.listdir(path)
-        if len(folders) != 2:
-            continue
+    folders = os.listdir(path)
+    if len(folders) != 2:
+        continue
 
-        if 'config' not in folders or 'system' not in folders:
-            continue
+    if 'config' not in folders or 'system' not in folders:
+        continue
 
-        jetbrains_folders.append(item)
+    jetbrains_folders.append(item)
 
-    return [re.match(r'\.([A-Za-z]+)[0-9.]+', folder).group(1).lower() for folder in jetbrains_folders]
+options = [re.match(r'\.([A-Za-z]+)[0-9.]+', folder).group(1).lower() for folder in jetbrains_folders]
+
+del home
+del jetbrains_folders

@@ -8,10 +8,7 @@ path = os.path.join(os.path.expanduser('~'), '.oversee.yaml')
 with open(path) as f:
     oversee = yaml.load(f)
 
-path = os.path.join(os.path.dirname(__file__), '.install.yaml')
-with open(path) as f:
-    install = yaml.load(f)
-
+install = oversee.get('install', {})
 move = oversee.get('move', {})
 
 
@@ -26,3 +23,4 @@ for key in oversee:
 
 jetbrains = oversee.get('jetbrains', {})
 environments = oversee.get('environments', {})
+gitignores = oversee.get('gitignores', {})
