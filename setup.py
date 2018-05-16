@@ -12,6 +12,7 @@ setup(
     url='http://github.com/jacsmith21/oversee',
     install_requires=[
         'click',
+        'GitPython',
         'python-elevate',
         'PyYaml',
         'beautifulsoup4',
