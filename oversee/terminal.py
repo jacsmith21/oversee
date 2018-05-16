@@ -1,5 +1,4 @@
 import os
-import re
 import subprocess
 import tarfile
 
@@ -85,7 +84,7 @@ COMMANDS = {'apt-get': apt_get, 'install': install, 'repository': add_apt_reposi
 
 
 def export_aliases(name):
-    aliases = config.get_aliases(name)
+    aliases = config.aliases[name]
     if aliases is None:
         click.echo('{} aliases do not exist in .oversee.yaml'.format(name))
 

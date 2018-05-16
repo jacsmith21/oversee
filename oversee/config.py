@@ -9,6 +9,7 @@ with open(path) as f:
 
 install = oversee.get('install', {})
 
+
 def get_aliases(name):
     return oversee.get('{}_aliases'.format(name))
 
@@ -19,4 +20,4 @@ for key in oversee.get('aliases', {}):
 
 jetbrains = oversee.get('jetbrains', {})
 environments = oversee.get('environments', {})
-gitignores = oversee.get('gitignores', {})
+gitignore = oversee.get('gitignore', {})

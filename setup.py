@@ -13,7 +13,9 @@ setup(
     install_requires=[
         'click',
         'python-elevate',
-        'PyYaml', 'beautifulsoup4'
+        'PyYaml',
+        'beautifulsoup4',
+        'elevate'
     ],
     entry_points={
         'console_scripts': ['oversee=oversee.main:main']

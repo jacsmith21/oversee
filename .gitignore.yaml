@@ -1,0 +1,9 @@
+variables:
+  name: oversee
+
+inherit:
+  - jetbrains
+  - python
+
+gitignore:
+ - default/

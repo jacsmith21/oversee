@@ -18,8 +18,21 @@ Place an `.oversee.yaml` in your home directory (ex. `~/.oversee.yaml`). See `ex
 # Install a package
 oversee install clion
 
-# Export your bash aliases to ~/.bash_aliases
-oversee export
+# Export your local bash aliases to ~/.bash_aliases
+oversee export local
+
+# Save you PyCharm settings & then sync them to CLion
+oversee save pycharm
+oversee sync clion
+
+# Setup your 'work' environment
+oversee setup work
+
+# Init or update your .gitignore using the official .gitignores on GitHub
+oversee project initignore pycharm
+
+# Make new python package release at version 0.3
+oversee project release 0.3
 ```
 
 ## Roadmap
