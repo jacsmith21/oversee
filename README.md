@@ -28,8 +28,8 @@ oversee sync clion
 # Setup your 'work' environment
 oversee setup work
 
-# Init or update your .gitignore using the official .gitignores on GitHub
-oversee project initignore pycharm
+# Export your .gitignore.yaml
+oversee project exportignore
 
 # Make new python package release at version 0.3
 oversee project release 0.3
@@ -42,3 +42,5 @@ oversee project release 0.3
 - [x] Autocomplete functionality
 - [x] Add list commands using decorator
 - [x] Add jetbrains .gitignore command
+- [ ] Add better tests
+- [ ] Look into better documentation

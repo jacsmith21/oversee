@@ -3,7 +3,9 @@ import subprocess
 import tarfile
 
 import click
+# noinspection PyPackageRequirements
 import elevate
+from click import ClickException
 
 from oversee import config
 
@@ -93,7 +95,10 @@ def export_aliases(name):
         inherit = [inherit]
 
     for parent in inherit:
-        aliases = elevate.builtin.dict_merge(config.get_aliases(parent), aliases)
+        if parent not in config.aliases:
+            raise ClickException('{} not an alias group'.format(parent))
+
+        aliases = elevate.builtin.dict_merge(config.aliases[parent], aliases)
 
     bash_aliases = ''
     for alias, command in aliases.get('aliases', {}).items():

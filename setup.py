@@ -14,8 +14,7 @@ setup(
         'click',
         'python-elevate',
         'PyYaml',
-        'beautifulsoup4',
-        'elevate'
+        'beautifulsoup4'
     ],
     entry_points={
         'console_scripts': ['oversee=oversee.main:main']
