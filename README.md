@@ -43,4 +43,6 @@ oversee project release 0.3
 - [x] Add list commands using decorator
 - [x] Add jetbrains .gitignore command
 - [ ] Add better tests
+- [ ] Add pipe support
+- [ ] Add support for zsh
 - [ ] Look into better documentation

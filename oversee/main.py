@@ -1,13 +1,9 @@
 import os
 import re
 import shutil
-import urllib.request
 
 import click
 import git
-import bs4
-import yaml
-from click import ClickException
 
 from oversee import terminal, jetbrains, extensions, gitignore
 from oversee import config
@@ -51,7 +47,9 @@ def sync(name):
             click.echo('{} does not exist and is not being synced.')
         else:
             click.echo('Copying {} to {}'.format(file, dst))
-
+        
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        
         shutil.copy(src, dst)
 
 
@@ -96,14 +94,15 @@ def setup(name):
         dst = repository['to']
         dst = os.path.expanduser(dst)
 
-        if os.path.exists(dst):
-            click.echo('Skipping {}. Folder exists!'.format(dst))
-            continue
-
         name, _ = os.path.basename(url).split('.')
         click.echo('Cloning {} to {}'.format(name, dst))
 
         to_path = os.path.join(dst, name)
+
+        if os.path.exists(to_path):
+            click.echo('Skipping {}. Folder exists!'.format(dst))
+            continue
+
         os.makedirs(dst, exist_ok=True)
         git.Repo.clone_from(url, to_path=to_path)
 
@@ -114,12 +113,13 @@ def project():
 
 
 @click.command()
-def exportignore():
+@click.argument('names', nargs=-1)
+def exportignore(names):
     """Exports your .gitignore.yaml to a .gitignore file!"""
     local = GitIgnore.from_local()
 
     inherit = gitignore.project_gitignore.get('inherit', [])
-    for name in inherit:
+    for name in [*inherit, *names]:
         local.extend(GitIgnore(name))
 
     path = os.getcwd()
@@ -153,7 +153,7 @@ def release(version):
     if click.confirm('Make version commit?'):
         message = click.prompt('Enter commit message: ', default=version)
         terminal.run('git add .')
-        terminal.run('git commit -m "{}"'.format(message))
+        terminal.run('git commit -m {}'.format(message))
 
     if click.confirm('Make release tag?'):
         terminal.run('git tag {}'.format(version))

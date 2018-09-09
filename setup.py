@@ -9,7 +9,7 @@ setup(
     description='A python utility to help manage your Ubuntu OS!',
     author='Jacob Smith',
     author_email='jacob.smith@unb.ca',
-    url='http://github.com/jacsmith21/oversee',
+    url='https://github.com/jsmith/oversee',
     install_requires=[
         'click',
         'GitPython',
